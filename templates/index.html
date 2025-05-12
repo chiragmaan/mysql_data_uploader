@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL Data Uploader</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>MySQL Data Uploader</h1>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="host">MySQL Host:</label>
+                <input type="text" id="host" name="host" required placeholder="localhost" value="localhost">
+            </div>
+            
+            <div class="form-group">
+                <label for="user">MySQL Username:</label>
+                <input type="text" id="user" name="user" required placeholder="root">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">MySQL Password:</label>
+                <input type="password" id="password" name="password" placeholder="(optional)">
+            </div>
+            
+            <div class="form-group">
+                <label for="database">Database Name:</label>
+                <input type="text" id="database" name="database" required placeholder="my_database">
+            </div>
+            
+            <div class="form-group">
+                <label for="table_name">Table Name:</label>
+                <input type="text" id="table_name" name="table_name" required placeholder="my_table">
+            </div>
+            
+            <div class="form-group">
+                <label for="file">Data File (CSV, Excel, JSON, TXT):</label>
+                <input type="file" id="file" name="file" accept=".csv,.xlsx,.xls,.json,.txt" required>
+                <small>The first row should contain column names</small>
+            </div>
+            
+            <button type="submit">Create Table & Upload Data</button>
+        </form>
+    </div>
+</body>
+</html>
