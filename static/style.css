@@ -112,3 +112,23 @@ small {
 .button:hover {
     background-color: #27ae60;
 }
+
+.analysis-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.analysis-table th, .analysis-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.analysis-table th {
+    background-color: #f2f2f2;
+}
+
+.analysis-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
