@@ -54,6 +54,67 @@
             
             <button type="submit">Create Table & Upload Data</button>
         </form>
+
+        <div id="analysis-results" style="display: none; margin-top: 20px;">
+            <h3>File Analysis</h3>
+            <table class="analysis-table">
+                <thead>
+                    <tr>
+                        <th>Column</th>
+                        <th>Pandas Type</th>
+                        <th>MySQL Type</th>
+                        <th>Min Value</th>
+                        <th>Max Value</th>
+                        <th>Null Count</th>
+                    </tr>
+                </thead>
+                <tbody id="analysis-data">
+                    <!-- Filled by JavaScript -->
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    <script>
+    document.getElementById('file').addEventListener('change', function(e) {
+        if (this.files.length === 0) return;
+        
+        const formData = new FormData();
+        formData.append('file', this.files[0]);
+        
+        fetch('/analyze', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+            
+            const tableBody = document.getElementById('analysis-data');
+            tableBody.innerHTML = '';
+            
+            for (const [col, stats] of Object.entries(data.analysis)) {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${col}</td>
+                    <td>${stats.pandas_type}</td>
+                    <td>${stats.mysql_type}</td>
+                    <td>${stats.min !== undefined ? stats.min : 'N/A'}</td>
+                    <td>${stats.max !== undefined ? stats.max : 'N/A'}</td>
+                    <td>${stats.nulls}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            }
+            
+            document.getElementById('analysis-results').style.display = 'block';
+        })
+        .catch(error => console.error('Error:', error));
+    });
+    </script>
 </body>
 </html>
